@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +51,10 @@ public class StaffServiceImpl implements StaffService {
         if (staff.getPerformanceRating() <= 3 && hotel.getStarRating() > 3) {
             throw new IllegalArgumentException("Staff with rating 3 or less can only be assigned to hotels with rating 3 or less.");
         }
+    }
+
+    @Override
+    public List<Staff> getAllStaffSortedByDepartment() { // Renamed method
+        return staffRepository.findAllSortedByDepartment(); // Updated call
     }
 }

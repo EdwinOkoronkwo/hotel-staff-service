@@ -10,4 +10,6 @@ public interface StaffService {
     Staff createStaff(Staff staff, Hotel hotel); // Modified method signature
     Staff updateStaff(Long staffId, Staff staff, Hotel hotel); // Modified method signature
     void deleteStaff(Long staffId);
+
+    List<Staff> getAllStaffSortedByDepartment();
 }

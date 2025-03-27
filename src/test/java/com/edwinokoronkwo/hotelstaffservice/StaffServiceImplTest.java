@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,23 +35,13 @@ class StaffServiceImplTest {
         staff = new Staff();
         staff.setStaffId(1L);
         staff.setStaffName("Test Staff");
-        staff.setPerformanceRating(4);
 
         hotel = new Hotel();
         hotel.setHotelId("Test1234");
         hotel.setHotelName("Test Hotel");
-        hotel.setStarRating(4);
+        hotel.setStarRating(3);
     }
 
-    @Test
-    void createStaff_valid_shouldSaveStaff() {
-        when(staffRepository.save(staff)).thenReturn(staff);
-
-        Staff createdStaff = staffService.createStaff(staff, hotel);
-
-        assertEquals(staff, createdStaff);
-        verify(staffRepository, times(1)).save(staff);
-    }
 
     @Test
     void createStaff_invalidRating_shouldThrowException() {
@@ -70,16 +62,29 @@ class StaffServiceImplTest {
         verify(staffRepository, times(1)).save(staff);
     }
 
-//    @Test
-//    void updateStaff_valid_shouldSaveStaff() {
-//        when(staffRepository.save(staff)).thenReturn(staff);
-//        when(staffRepository.existsById(1L)).thenReturn(true);
-//
-//        Staff updatedStaff = staffService.updateStaff(1L, staff, hotel);
-//
-//        assertEquals(staff, updatedStaff);
-//        verify(staffRepository, times(1)).save(staff);
-//    }
+
+
+    @Test
+    void createStaff_valid_shouldSaveStaff() {
+        when(staffRepository.save(staff)).thenReturn(staff);
+
+        Staff createdStaff = staffService.createStaff(staff, hotel);
+
+        assertEquals(staff, createdStaff);
+        verify(staffRepository, times(1)).save(staff);
+    }
+
+    @Test
+    void createStaff_defaultPerformanceRating_shouldBe3() {
+        when(staffRepository.save(staff)).thenReturn(staff);
+
+        Staff createdStaff = staffService.createStaff(staff, hotel);
+
+        assertEquals(3, createdStaff.getPerformanceRating());
+        verify(staffRepository, times(1)).save(staff);
+    }
+
+
 
     @Test
     void updateStaff_invalidRating_shouldThrowException() {
@@ -114,5 +119,52 @@ class StaffServiceImplTest {
     void deleteStaff_shouldCallDeleteById() {
         staffService.deleteStaff(1L);
         verify(staffRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void getAllStaffSortedByDepartment_shouldReturnSortedList() {
+        // Set up test data
+        Staff staff1 = new Staff();
+        staff1.setStaffName("Staff D");
+        staff1.setDepartment("Reception");
+
+        Staff staff2 = new Staff();
+        staff2.setStaffName("Staff E");
+        staff2.setDepartment("Reception");
+
+        Staff staff3 = new Staff();
+        staff3.setStaffName("Staff A");
+        staff3.setDepartment("Cleaning");
+
+        Staff staff4 = new Staff();
+        staff4.setStaffName("Staff B");
+        staff4.setDepartment("Cleaning");
+
+        Staff staff5 = new Staff();
+        staff5.setStaffName("Staff F");
+        staff5.setDepartment("Management");
+
+        Staff staff6 = new Staff();
+        staff6.setStaffName("Staff G");
+        staff6.setDepartment("Restaurant");
+
+        List<Staff> staffList = Arrays.asList(staff1, staff2, staff3, staff4, staff5, staff6);
+
+        // Mock the repository
+        when(staffRepository.findAllSortedByDepartment()).thenReturn(staffList);
+
+        // Call the service method
+        List<Staff> sortedStaffList = staffService.getAllStaffSortedByDepartment();
+
+        // Assert the order
+        assertEquals(6, sortedStaffList.size());
+        assertEquals("Staff D", sortedStaffList.get(0).getStaffName()); // Reception
+        assertEquals("Staff E", sortedStaffList.get(1).getStaffName()); // Reception
+        assertEquals("Staff A", sortedStaffList.get(2).getStaffName()); // Cleaning
+        assertEquals("Staff B", sortedStaffList.get(3).getStaffName()); // Cleaning
+        assertEquals("Staff F", sortedStaffList.get(4).getStaffName()); // Management
+        assertEquals("Staff G", sortedStaffList.get(5).getStaffName()); // Restaurant
+
+        verify(staffRepository, times(1)).findAllSortedByDepartment();
     }
 }

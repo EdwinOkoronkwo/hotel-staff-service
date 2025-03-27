@@ -56,4 +56,9 @@ public class StaffController {
         staffService.deleteStaff(staffId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/sorted")
+    public ResponseEntity<List<Staff>> getAllStaffSorted() {
+        return ResponseEntity.ok(staffService.getAllStaffSortedByDepartment());
+    }
 }

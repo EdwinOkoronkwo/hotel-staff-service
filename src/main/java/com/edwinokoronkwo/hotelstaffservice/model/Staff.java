@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,5 +28,5 @@ public class Staff {
     private String department;
 
     @Column(name = "performance_rating")
-    private int performanceRating = 3; // Default rating is 3
+    private int performanceRating = 3; // Default performance rating set to 3
 }
