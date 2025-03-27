@@ -3,10 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - main # or your default branch name
+      - master # Correct branch name
   pull_request:
     branches:
-      - main # or your default branch name
+      - master # Correct branch name
 
 jobs:
   build:
@@ -16,10 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Cache Maven packages
