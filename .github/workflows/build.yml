@@ -3,10 +3,10 @@ name: Build and Test
 on:
   push:
     branches:
-      - master # Correct branch name
+      - master
   pull_request:
     branches:
-      - master # Correct branch name
+      - master
 
 jobs:
   build:
@@ -29,5 +29,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Clean build directory
+        run: mvn clean # Added clean build step
+
       - name: Build and run tests with Maven
-        run: mvn clean verify
+        run: mvn verify
