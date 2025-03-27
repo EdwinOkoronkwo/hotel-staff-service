@@ -1,5 +1,6 @@
 package com.edwinokoronkwo.hotelstaffservice.controller;
 
+import com.edwinokoronkwo.hotelstaffservice.model.Hotel;
 import com.edwinokoronkwo.hotelstaffservice.model.Staff;
 import com.edwinokoronkwo.hotelstaffservice.service.StaffService;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +33,17 @@ public class StaffController {
         }
     }
 
+
     @PostMapping
     public ResponseEntity<Staff> createStaff(@Valid @RequestBody Staff staff) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(staffService.createStaff(staff));
+        Hotel hotel = staff.getHotel(); // Extract the Hotel object
+        return ResponseEntity.status(HttpStatus.CREATED).body(staffService.createStaff(staff, hotel)); // Pass both Staff and Hotel
     }
 
     @PutMapping("/{staffId}")
     public ResponseEntity<Staff> updateStaff(@PathVariable Long staffId, @Valid @RequestBody Staff staff) {
-        Staff updatedStaff = staffService.updateStaff(staffId, staff);
+        Hotel hotel = staff.getHotel(); // Extract the Hotel object
+        Staff updatedStaff = staffService.updateStaff(staffId, staff, hotel); // Pass the hotel object
         if (updatedStaff != null) {
             return ResponseEntity.ok(updatedStaff);
         } else {

@@ -63,13 +63,23 @@ class StaffServiceImplTest {
     @Test
     void updateStaff_valid_shouldSaveStaff() {
         when(staffRepository.save(staff)).thenReturn(staff);
-        when(staffRepository.existsById(1L)).thenReturn(true);
 
         Staff updatedStaff = staffService.updateStaff(1L, staff, hotel);
 
         assertEquals(staff, updatedStaff);
         verify(staffRepository, times(1)).save(staff);
     }
+
+//    @Test
+//    void updateStaff_valid_shouldSaveStaff() {
+//        when(staffRepository.save(staff)).thenReturn(staff);
+//        when(staffRepository.existsById(1L)).thenReturn(true);
+//
+//        Staff updatedStaff = staffService.updateStaff(1L, staff, hotel);
+//
+//        assertEquals(staff, updatedStaff);
+//        verify(staffRepository, times(1)).save(staff);
+//    }
 
     @Test
     void updateStaff_invalidRating_shouldThrowException() {
