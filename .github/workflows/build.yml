@@ -20,6 +20,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: hotel_staff_db
+          MYSQL_USER: root # Added MYSQL_USER
         options: >-
           --health-cmd="mysqladmin ping" --health-timeout=10s --health-interval=5s
 
