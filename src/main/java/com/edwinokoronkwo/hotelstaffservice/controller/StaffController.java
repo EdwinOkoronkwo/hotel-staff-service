@@ -36,14 +36,14 @@ public class StaffController {
 
     @PostMapping
     public ResponseEntity<Staff> createStaff(@Valid @RequestBody Staff staff) {
-        Hotel hotel = staff.getHotel(); // Extract the Hotel object
-        return ResponseEntity.status(HttpStatus.CREATED).body(staffService.createStaff(staff, hotel)); // Pass both Staff and Hotel
+        Hotel hotel = staff.getHotel();
+        return ResponseEntity.status(HttpStatus.CREATED).body(staffService.createStaff(staff, hotel));
     }
 
     @PutMapping("/{staffId}")
     public ResponseEntity<Staff> updateStaff(@PathVariable Long staffId, @Valid @RequestBody Staff staff) {
-        Hotel hotel = staff.getHotel(); // Extract the Hotel object
-        Staff updatedStaff = staffService.updateStaff(staffId, staff, hotel); // Pass the hotel object
+        Hotel hotel = staff.getHotel();
+        Staff updatedStaff = staffService.updateStaff(staffId, staff, hotel);
         if (updatedStaff != null) {
             return ResponseEntity.ok(updatedStaff);
         } else {
