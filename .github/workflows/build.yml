@@ -14,13 +14,13 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0 # Or the version you prefer
+        image: mysql:8.0
         ports:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: hotel_staff_db
-          MYSQL_USER: root # Added MYSQL_USER
+          MYSQL_USER: root
         options: >-
           --health-cmd="mysqladmin ping" --health-timeout=10s --health-interval=5s
 
@@ -42,7 +42,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Clean build directory
-        run: mvn clean # Added clean build step
+        run: mvn clean
+
+      - name: Wait for MySQL
+        run: |
+          sleep 10
+          mysqladmin ping -h 127.0.0.1 -u root -ppassword
 
       - name: Build and run tests with Maven
         run: mvn verify
