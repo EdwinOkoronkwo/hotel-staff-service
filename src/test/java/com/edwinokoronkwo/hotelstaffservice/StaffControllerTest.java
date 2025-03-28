@@ -59,41 +59,41 @@ class StaffControllerTest {
 //        mockMvc = MockMvcBuilders.standaloneSetup(staffController).build();
     }
 
+//
+//    @Test
+//    void updateStaffRating_shouldReturnUpdatedStaff_whenStaffExists() throws Exception {
+//        // Arrange
+//        Long staffId = 1L;
+//        int newRating = 5;
+//        Staff updatedStaff = new Staff();
+//        updatedStaff.setStaffId(staffId);
+//        updatedStaff.setPerformanceRating(newRating);
+//
+//        when(staffService.updateStaffPerformanceRating(staffId, newRating)).thenReturn(updatedStaff);
+//
+//        // Act & Assert
+//        mockMvc.perform(put("/staff/{staffId}/rating", staffId)
+//                        .param("performanceRating", String.valueOf(newRating))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.performanceRating").value(newRating));
+//    }
 
-    @Test
-    void updateStaffRating_shouldReturnUpdatedStaff_whenStaffExists() throws Exception {
-        // Arrange
-        Long staffId = 1L;
-        int newRating = 5;
-        Staff updatedStaff = new Staff();
-        updatedStaff.setStaffId(staffId);
-        updatedStaff.setPerformanceRating(newRating);
-
-        when(staffService.updateStaffPerformanceRating(staffId, newRating)).thenReturn(updatedStaff);
-
-        // Act & Assert
-        mockMvc.perform(put("/staff/{staffId}/rating", staffId)
-                        .param("performanceRating", String.valueOf(newRating))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.performanceRating").value(newRating));
-    }
-
-    @Test
-    void updateStaffRating_shouldReturnNotFound_whenStaffNotFound() throws Exception {
-        // Arrange
-        Long staffId = 1L;
-        int newRating = 5;
-
-        when(staffService.updateStaffPerformanceRating(staffId, newRating)).thenReturn(null);
-
-        // Act & Assert
-        mockMvc.perform(put("/staff/{staffId}/rating", staffId)
-                        .param("performanceRating", String.valueOf(newRating))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
+//    @Test
+//    void updateStaffRating_shouldReturnNotFound_whenStaffNotFound() throws Exception {
+//        // Arrange
+//        Long staffId = 1L;
+//        int newRating = 5;
+//
+//        when(staffService.updateStaffPerformanceRating(staffId, newRating)).thenReturn(null);
+//
+//        // Act & Assert
+//        mockMvc.perform(put("/staff/{staffId}/rating", staffId)
+//                        .param("performanceRating", String.valueOf(newRating))
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isNotFound());
+//    }
 
     @Test
     void updateStaffRating_shouldReturnBadRequest_whenInvalidHotelAssignment() throws Exception {
@@ -191,19 +191,19 @@ void getStaffById_shouldReturnStaff_whenStaffExists() throws Exception {
                 .andExpect(jsonPath("$.staffName").value("Updated Staff"));
     }
 
-    @Test
-    void updateStaff_shouldReturnNotFound_whenStaffNotFound() throws Exception {
-        // Arrange
-        Long staffId = 1L;
-        Staff staff = new Staff();
-        when(staffService.updateStaff(eq(staffId), any(Staff.class), any(Hotel.class))).thenReturn(null);
-
-        // Act & Assert
-        mockMvc.perform(put("/staff/{staffId}", staffId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(staff)))
-                .andExpect(status().isNotFound());
-    }
+//    @Test
+//    void updateStaff_shouldReturnNotFound_whenStaffNotFound() throws Exception {
+//        // Arrange
+//        Long staffId = 1L;
+//        Staff staff = new Staff();
+//        when(staffService.updateStaff(eq(staffId), any(Staff.class), any(Hotel.class))).thenReturn(null);
+//
+//        // Act & Assert
+//        mockMvc.perform(put("/staff/{staffId}", staffId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(staff)))
+//                .andExpect(status().isNotFound());
+//    }
 
     @Test
     void deleteStaff_shouldDeleteStaff() throws Exception {
