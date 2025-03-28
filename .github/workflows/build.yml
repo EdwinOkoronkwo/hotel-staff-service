@@ -12,18 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: hotel_staff_db
-          MYSQL_USER: root
-        options: >-
-          --health-cmd="mysqladmin ping" --health-timeout=10s --health-interval=5s
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -44,10 +32,5 @@ jobs:
       - name: Clean build directory
         run: mvn clean
 
-      - name: Wait for MySQL
-        run: |
-          sleep 10
-          mysqladmin ping -h 127.0.0.1 -u root -ppassword
-
-      - name: Build and run tests with Maven
-        run: mvn verify
+      - name: Build and run tests with Maven (using H2)
+        run: mvn verify -Dspring.profiles.active=test
