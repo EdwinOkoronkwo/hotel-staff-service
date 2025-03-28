@@ -1,8 +1,10 @@
 package com.edwinokoronkwo.hotelstaffservice;
 
+import com.edwinokoronkwo.hotelstaffservice.exception.InvalidHotelAssignmentException;
 import com.edwinokoronkwo.hotelstaffservice.model.Staff;
 import com.edwinokoronkwo.hotelstaffservice.model.Hotel;
 import com.edwinokoronkwo.hotelstaffservice.repository.StaffRepository;
+import com.edwinokoronkwo.hotelstaffservice.service.StaffService;
 import com.edwinokoronkwo.hotelstaffservice.service.StaffServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +26,10 @@ class StaffServiceImplTest {
     @Mock
     private StaffRepository staffRepository;
 
+
     @InjectMocks
     private StaffServiceImpl staffService;
+
 
     private Staff staff;
     private Hotel hotel;
@@ -166,5 +170,60 @@ class StaffServiceImplTest {
         assertEquals("Staff G", sortedStaffList.get(5).getStaffName()); // Restaurant
 
         verify(staffRepository, times(1)).findAllSortedByDepartment();
+    }
+
+    @Test
+    void updateStaffPerformanceRating_shouldUpdateRating_whenStaffExists() {
+        // Arrange
+        Long staffId = 1L;
+        int newRating = 5;
+        Staff staff = new Staff();
+        staff.setStaffId(staffId);
+        staff.setPerformanceRating(3);
+
+        when(staffRepository.findById(staffId)).thenReturn(Optional.of(staff));
+        when(staffRepository.save(staff)).thenReturn(staff);
+
+        // Act
+        Staff updatedStaff = staffService.updateStaffPerformanceRating(staffId, newRating);
+
+        // Assert
+        assertEquals(newRating, updatedStaff.getPerformanceRating());
+        verify(staffRepository, times(1)).save(staff);
+    }
+
+    @Test
+    void updateStaffPerformanceRating_shouldReturnNull_whenStaffNotFound() {
+        // Arrange
+        Long staffId = 1L;
+        int newRating = 5;
+
+        when(staffRepository.findById(staffId)).thenReturn(Optional.empty());
+
+        // Act
+        Staff updatedStaff = staffService.updateStaffPerformanceRating(staffId, newRating);
+
+        // Assert
+        assertNull(updatedStaff);
+        verify(staffRepository, never()).save(any());
+    }
+
+    @Test
+    void updateStaffPerformanceRating_shouldThrowException_whenInvalidHotelAssignment() {
+        // Arrange
+        Long staffId = 1L;
+        int newRating = 4;
+        Staff staff = new Staff();
+        staff.setStaffId(staffId);
+        staff.setPerformanceRating(3);
+        Hotel hotel = new Hotel();
+        hotel.setStarRating(3);
+        staff.setHotel(hotel);
+
+        when(staffRepository.findById(staffId)).thenReturn(Optional.of(staff));
+
+        // Act & Assert
+        assertThrows(InvalidHotelAssignmentException.class, () -> staffService.updateStaffPerformanceRating(staffId, newRating));
+        verify(staffRepository, never()).save(any());
     }
 }

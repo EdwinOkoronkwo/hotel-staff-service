@@ -33,4 +33,4 @@ jobs:
         run: mvn clean
 
       - name: Build and run tests with Maven (using H2)
-        run: mvn verify -Dspring.profiles.active=test
+        run: mvn verify

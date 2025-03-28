@@ -1,5 +1,6 @@
 package com.edwinokoronkwo.hotelstaffservice.controller;
 
+import com.edwinokoronkwo.hotelstaffservice.exception.InvalidHotelAssignmentException;
 import com.edwinokoronkwo.hotelstaffservice.model.Hotel;
 import com.edwinokoronkwo.hotelstaffservice.model.Staff;
 import com.edwinokoronkwo.hotelstaffservice.service.StaffService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/staff")
@@ -22,6 +24,12 @@ public class StaffController {
     public ResponseEntity<List<Staff>> getAllStaff() {
         return ResponseEntity.ok(staffService.getAllStaff());
     }
+
+    @GetMapping("/sorted")
+    public ResponseEntity<List<Staff>> getAllStaffSorted() {
+        return ResponseEntity.ok(staffService.getAllStaffSortedByDepartment());
+    }
+
 
     @GetMapping("/{staffId}")
     public ResponseEntity<Staff> getStaffById(@PathVariable Long staffId) {
@@ -57,8 +65,22 @@ public class StaffController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/sorted")
-    public ResponseEntity<List<Staff>> getAllStaffSorted() {
-        return ResponseEntity.ok(staffService.getAllStaffSortedByDepartment());
+
+
+    @PutMapping("/{staffId}/rating")
+    public ResponseEntity<Staff> updateStaffRating(@PathVariable Long staffId, @RequestBody Map<String, Integer> requestBody) {
+        try {
+            int performanceRating = requestBody.get("performanceRating");
+            Staff updatedStaff = staffService.updateStaffPerformanceRating(staffId, performanceRating);
+            if (updatedStaff != null) {
+                return ResponseEntity.ok(updatedStaff);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (InvalidHotelAssignmentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
+
+
 }

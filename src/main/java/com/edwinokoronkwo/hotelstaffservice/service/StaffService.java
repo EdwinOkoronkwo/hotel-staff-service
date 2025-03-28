@@ -12,4 +12,5 @@ public interface StaffService {
     void deleteStaff(Long staffId);
 
     List<Staff> getAllStaffSortedByDepartment();
+    Staff updateStaffPerformanceRating(Long staffId, int performanceRating);
 }
