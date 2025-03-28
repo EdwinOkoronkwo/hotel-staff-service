@@ -1,3 +1,13 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,5 +34,3 @@ jobs:
 
       - name: Build and run tests with Maven (using H2)
         run: mvn verify -Dspring.profiles.active=test
-
-
