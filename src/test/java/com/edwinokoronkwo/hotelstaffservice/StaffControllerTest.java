@@ -38,27 +38,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.annotation.ComponentScan; // Import ComponentScan
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.mock.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @WebMvcTest(StaffController.class)
-@AutoConfigureMockMvc(
-        addFilters = false
-)
+@AutoConfigureMockMvc(addFilters = false)
+@ComponentScan("com.edwinokoronkwo.hotelstaffservice.security.jwt") // Include JwtUtils package
 class StaffControllerTest {
 
     @MockitoBean
     private StaffService staffService;
 
-    private ObjectMapper objectMapper; // Removed @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-//        MockitoAnnotations.openMocks(this);
-        objectMapper = new ObjectMapper(); // Manually create ObjectMapper
-//        mockMvc = MockMvcBuilders.standaloneSetup(staffController).build();
+        objectMapper = new ObjectMapper();
     }
-
 
     @Test
     void updateStaffRating_shouldReturnUpdatedStaff_whenStaffExists() throws Exception {
@@ -126,21 +133,21 @@ class StaffControllerTest {
 
 
 
-@Test
-void getStaffById_shouldReturnStaff_whenStaffExists() throws Exception {
-    // Arrange
-    Long staffId = 1L;
-    Staff staff = new Staff();
-    staff.setStaffId(staffId);
-    System.out.println("Mock setup: staffService.getStaffById(" + staffId + ") -> " + staff); // Debugging
-    when(staffService.getStaffById(staffId)).thenReturn(staff);
+    @Test
+    void getStaffById_shouldReturnStaff_whenStaffExists() throws Exception {
+        // Arrange
+        Long staffId = 1L;
+        Staff staff = new Staff();
+        staff.setStaffId(staffId);
+        System.out.println("Mock setup: staffService.getStaffById(" + staffId + ") -> " + staff); // Debugging
+        when(staffService.getStaffById(staffId)).thenReturn(staff);
 
-    // Act & Assert
-    mockMvc.perform(get("/staff/{staffId}", staffId))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.staffId").value(staffId));
-}
+        // Act & Assert
+        mockMvc.perform(get("/staff/{staffId}", staffId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.staffId").value(staffId));
+    }
 
 
     @Test
